@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+  body { margin: 0; padding: 24px; background: #101010; font-family: Consolas, "Courier New", monospace; display: flex; flex-direction: column; gap: 32px; align-items: flex-start; }
+  .scan { position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,0.22) 2px 4px); border-radius: inherit; }
+
+  #hero { width: 1280px; box-sizing: border-box; padding: 44px 48px 36px; background: radial-gradient(ellipse at 50% -20%, #12351a 0%, #050b06 60%, #030503 100%); border: 4px solid #2a241a; border-radius: 18px; position: relative; }
+  #hero h1 { margin: 0; color: #33ff41; font-size: 52px; letter-spacing: 6px; text-shadow: 0 0 18px rgba(51,255,65,.75); }
+  #hero h1 .amber { color: #ffb000; text-shadow: 0 0 18px rgba(255,176,0,.75); }
+  #hero p { margin: 10px 0 30px; color: #7adf88; font-size: 19px; letter-spacing: 2px; }
+  .minis { display: flex; gap: 22px; }
+  .mini { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+  .mini-screen { position: relative; width: 200px; height: 118px; border: 3px solid #3a3428; border-radius: 8px; padding: 12px 14px; box-sizing: border-box; }
+  .mini-screen b { font-size: 15px; }
+  .bars { display: flex; gap: 6px; margin-top: 14px; }
+  .bars i { width: 30px; height: 9px; border-radius: 2px; }
+  .mini-label { color: #9aa08a; font-size: 13px; letter-spacing: 1px; }
+
+  .shot { width: 820px; }
+  .win { border: 1px solid #333; border-radius: 10px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,.6); }
+  .titlebar { background: #1c1c1c; padding: 9px 12px; display: flex; align-items: center; gap: 7px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+  .title { color: #8a8a8a; font-size: 12px; letter-spacing: 1px; margin-left: 10px; }
+  .term { position: relative; padding: 18px 20px 22px; font-size: 15px; line-height: 1.65; text-shadow: 0 0 3px rgba(255,255,255,.15); }
+  .cursor { display: inline-block; }
+</style></head>
+<body>
+<div id="hero">
+  <h1>RETRO TERMINAL <span class="amber">THEMES</span></h1>
+  <p>&gt; 20 RETRO TERMINAL COLOR THEMES · 1964–2010 · FOR THE VS CODE INTEGRATED TERMINAL_</p>
+  <div class="minis">
+    <div class="mini">
+      <div class="mini-screen" style="background:#120b00">
+        <b style="color:#ffb000">$ 1975</b>
+        <div class="bars"><i style="background:#ff8c1a"></i><i style="background:#ffd11a"></i><i style="background:#ffb733"></i><i style="background:#cc9933"></i></div>
+        <div class="scan"></div>
+      </div>
+      <span class="mini-label">DEC VT52 Amber</span>
+    </div>
+    <div class="mini">
+      <div class="mini-screen" style="background:#071004">
+        <b style="color:#33ff33">$ 1977</b>
+        <div class="bars"><i style="background:#3dff3d"></i><i style="background:#52ff52"></i><i style="background:#66ff66"></i><i style="background:#2eb82e"></i></div>
+        <div class="scan"></div>
+      </div>
+      <span class="mini-label">Apple II Green</span>
+    </div>
+    <div class="mini">
+      <div class="mini-screen" style="background:#40318d">
+        <b style="color:#7869c4">$ 1982</b>
+        <div class="bars"><i style="background:#b86962"></i><i style="background:#ffffb2"></i><i style="background:#94e089"></i><i style="background:#7869c4"></i></div>
+        <div class="scan"></div>
+      </div>
+      <span class="mini-label">Commodore 64</span>
+    </div>
+    <div class="mini">
+      <div class="mini-screen" style="background:#0000a8">
+        <b style="color:#ffff55">$ 1990</b>
+        <div class="bars"><i style="background:#fc5454"></i><i style="background:#fcfc54"></i><i style="background:#54fc54"></i><i style="background:#5454fc"></i></div>
+        <div class="scan"></div>
+      </div>
+      <span class="mini-label">Turbo Pascal</span>
+    </div>
+    <div class="mini">
+      <div class="mini-screen" style="background:#000000">
+        <b style="color:#00ff41">$ 1999</b>
+        <div class="bars"><i style="background:#22ff55"></i><i style="background:#44ff6e"></i><i style="background:#66ff8c"></i><i style="background:#00d637"></i></div>
+        <div class="scan"></div>
+      </div>
+      <span class="mini-label">Hacker Green (Matrix)</span>
+    </div></div>
+  <div class="scan"></div>
+</div>
+
+  <div class="shot" id="shot-dec-vt52-amber">
+    <div class="win">
+      <div class="titlebar">
+        <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+        <span class="title">TERMINAL — DEC VT52 AMBER · 1975</span>
+      </div>
+      <div class="term" style="background:#120b00;color:#ffb000">
+<div><span style="color:#ffb000">$ </span><span style="color:#ffc966">retro-terminal</span><span style="color:#ffb000"> --theme </span><span style="color:#ffd11a">"DEC VT52 Amber"</span></div>
+<div><span style="color:#ffb733">  ✔ applied</span><span style="color:#664400">  # Warm amber phosphor glow of DEC video terminals</span></div>
+<div><span style="color:#ffb000">$ ls</span></div>
+<div>  <span style="color:#cc9933">src/</span>  <span style="color:#cc9933">docs/</span>  <span style="color:#ffb000">README.md</span>  <span style="color:#e6a833">themes.ts</span>  <span style="color:#ffc966">package.json</span></div>
+<div><span style="color:#ffb000">$ git log --oneline -2</span></div>
+<div>  <span style="color:#ffb000">6cd8511</span><span style="color:#ffb000"> add activity bar theme browser</span></div>
+<div>  <span style="color:#ffb000">dd9c66e</span><span style="color:#ffb000"> ship 20 retro palettes</span></div>
+<div><span style="color:#ffb000">$ echo $YEAR</span></div>
+<div>  <span style="color:#ff8c1a">1975</span></div>
+<div><span style="color:#ffb000">$ </span><span class="cursor" style="background:#ffcc33">&nbsp;&nbsp;</span></div>
+        <div class="scan"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="shot" id="shot-apple-ii-green">
+    <div class="win">
+      <div class="titlebar">
+        <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+        <span class="title">TERMINAL — APPLE II GREEN · 1977</span>
+      </div>
+      <div class="term" style="background:#071004;color:#33ff33">
+<div><span style="color:#33ff33">$ </span><span style="color:#70ff70">retro-terminal</span><span style="color:#33ff33"> --theme </span><span style="color:#52ff52">"Apple II Green"</span></div>
+<div><span style="color:#66ff66">  ✔ applied</span><span style="color:#146614">  # Classic green P1 phosphor of the Apple ][ monitor</span></div>
+<div><span style="color:#33ff33">$ ls</span></div>
+<div>  <span style="color:#2eb82e">src/</span>  <span style="color:#2eb82e">docs/</span>  <span style="color:#33ff33">README.md</span>  <span style="color:#47e647">themes.ts</span>  <span style="color:#70ff70">package.json</span></div>
+<div><span style="color:#33ff33">$ git log --oneline -2</span></div>
+<div>  <span style="color:#29cc29">6cd8511</span><span style="color:#33ff33"> add activity bar theme browser</span></div>
+<div>  <span style="color:#29cc29">dd9c66e</span><span style="color:#33ff33"> ship 20 retro palettes</span></div>
+<div><span style="color:#33ff33">$ echo $YEAR</span></div>
+<div>  <span style="color:#3dff3d">1977</span></div>
+<div><span style="color:#33ff33">$ </span><span class="cursor" style="background:#66ff66">&nbsp;&nbsp;</span></div>
+        <div class="scan"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="shot" id="shot-commodore-64">
+    <div class="win">
+      <div class="titlebar">
+        <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+        <span class="title">TERMINAL — COMMODORE 64 · 1982</span>
+      </div>
+      <div class="term" style="background:#40318d;color:#7869c4">
+<div><span style="color:#7869c4">$ </span><span style="color:#a3e6ed">retro-terminal</span><span style="color:#7869c4"> --theme </span><span style="color:#ffffb2">"Commodore 64"</span></div>
+<div><span style="color:#94e089">  ✔ applied</span><span style="color:#575757">  # READY. — light blue text on the famous deep blue screen</span></div>
+<div><span style="color:#7869c4">$ ls</span></div>
+<div>  <span style="color:#7869c4">src/</span>  <span style="color:#7869c4">docs/</span>  <span style="color:#7869c4">README.md</span>  <span style="color:#bf6fc9">themes.ts</span>  <span style="color:#a3e6ed">package.json</span></div>
+<div><span style="color:#7869c4">$ git log --oneline -2</span></div>
+<div>  <span style="color:#bfce72">6cd8511</span><span style="color:#7869c4"> add activity bar theme browser</span></div>
+<div>  <span style="color:#bfce72">dd9c66e</span><span style="color:#7869c4"> ship 20 retro palettes</span></div>
+<div><span style="color:#7869c4">$ echo $YEAR</span></div>
+<div>  <span style="color:#b86962">1982</span></div>
+<div><span style="color:#7869c4">$ </span><span class="cursor" style="background:#7869c4">&nbsp;&nbsp;</span></div>
+        <div class="scan"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="shot" id="shot-turbo-pascal">
+    <div class="win">
+      <div class="titlebar">
+        <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+        <span class="title">TERMINAL — TURBO PASCAL · 1990</span>
+      </div>
+      <div class="term" style="background:#0000a8;color:#ffff55">
+<div><span style="color:#ffff55">$ </span><span style="color:#54fcfc">retro-terminal</span><span style="color:#ffff55"> --theme </span><span style="color:#fcfc54">"Turbo Pascal"</span></div>
+<div><span style="color:#54fc54">  ✔ applied</span><span style="color:#545454">  # Borland's IDE — yellow on blue, F1 for Help</span></div>
+<div><span style="color:#ffff55">$ ls</span></div>
+<div>  <span style="color:#5454fc">src/</span>  <span style="color:#5454fc">docs/</span>  <span style="color:#ffff55">README.md</span>  <span style="color:#fc54fc">themes.ts</span>  <span style="color:#54fcfc">package.json</span></div>
+<div><span style="color:#ffff55">$ git log --oneline -2</span></div>
+<div>  <span style="color:#a85400">6cd8511</span><span style="color:#ffff55"> add activity bar theme browser</span></div>
+<div>  <span style="color:#a85400">dd9c66e</span><span style="color:#ffff55"> ship 20 retro palettes</span></div>
+<div><span style="color:#ffff55">$ echo $YEAR</span></div>
+<div>  <span style="color:#fc5454">1990</span></div>
+<div><span style="color:#ffff55">$ </span><span class="cursor" style="background:#ffff55">&nbsp;&nbsp;</span></div>
+        <div class="scan"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="shot" id="shot-hacker-green-matrix">
+    <div class="win">
+      <div class="titlebar">
+        <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+        <span class="title">TERMINAL — HACKER GREEN (MATRIX) · 1999</span>
+      </div>
+      <div class="term" style="background:#000000;color:#00ff41">
+<div><span style="color:#00ff41">$ </span><span style="color:#7fffa0">retro-terminal</span><span style="color:#00ff41"> --theme </span><span style="color:#44ff6e">"Hacker Green (Matrix)"</span></div>
+<div><span style="color:#66ff8c">  ✔ applied</span><span style="color:#003b09">  # Follow the white rabbit — #00ff41 rain on pure black</span></div>
+<div><span style="color:#00ff41">$ ls</span></div>
+<div>  <span style="color:#00d637">src/</span>  <span style="color:#00d637">docs/</span>  <span style="color:#00ff41">README.md</span>  <span style="color:#33ff61">themes.ts</span>  <span style="color:#7fffa0">package.json</span></div>
+<div><span style="color:#00ff41">$ git log --oneline -2</span></div>
+<div>  <span style="color:#00cc33">6cd8511</span><span style="color:#00ff41"> add activity bar theme browser</span></div>
+<div>  <span style="color:#00cc33">dd9c66e</span><span style="color:#00ff41"> ship 20 retro palettes</span></div>
+<div><span style="color:#00ff41">$ echo $YEAR</span></div>
+<div>  <span style="color:#22ff55">1999</span></div>
+<div><span style="color:#00ff41">$ </span><span class="cursor" style="background:#00ff41">&nbsp;&nbsp;</span></div>
+        <div class="scan"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="shot" id="shot-solarized-dark">
+    <div class="win">
+      <div class="titlebar">
+        <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
+        <span class="title">TERMINAL — SOLARIZED DARK · 2010</span>
+      </div>
+      <div class="term" style="background:#002b36;color:#839496">
+<div><span style="color:#839496">$ </span><span style="color:#93a1a1">retro-terminal</span><span style="color:#839496"> --theme </span><span style="color:#657b83">"Solarized Dark"</span></div>
+<div><span style="color:#586e75">  ✔ applied</span><span style="color:#002b36">  # Ethan Schoonover's precision dark palette</span></div>
+<div><span style="color:#839496">$ ls</span></div>
+<div>  <span style="color:#839496">src/</span>  <span style="color:#839496">docs/</span>  <span style="color:#839496">README.md</span>  <span style="color:#6c71c4">themes.ts</span>  <span style="color:#93a1a1">package.json</span></div>
+<div><span style="color:#839496">$ git log --oneline -2</span></div>
+<div>  <span style="color:#b58900">6cd8511</span><span style="color:#839496"> add activity bar theme browser</span></div>
+<div>  <span style="color:#b58900">dd9c66e</span><span style="color:#839496"> ship 20 retro palettes</span></div>
+<div><span style="color:#839496">$ echo $YEAR</span></div>
+<div>  <span style="color:#cb4b16">2010</span></div>
+<div><span style="color:#839496">$ </span><span class="cursor" style="background:#93a1a1">&nbsp;&nbsp;</span></div>
+        <div class="scan"></div>
+      </div>
+    </div>
+  </div>
+</body></html>

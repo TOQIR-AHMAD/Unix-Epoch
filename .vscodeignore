@@ -1,5 +1,8 @@
 .vscode/**
 .gitignore
+media/**
+scripts/**
+.playwright-mcp/**
 src/**
 tsconfig.json
 out/**/*.map

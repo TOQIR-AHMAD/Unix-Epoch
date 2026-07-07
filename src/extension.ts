@@ -34,27 +34,73 @@ async function writeGlobalColorCustomizations(
     .update("colorCustomizations", value, vscode.ConfigurationTarget.Global);
 }
 
+/** True when the user wants the terminal panel chrome (tabs/toolbar) themed too. */
+function isImmersive(): boolean {
+  return vscode.workspace
+    .getConfiguration("retroTerminal")
+    .get<boolean>("immersiveMode", true);
+}
+
 /**
- * Merge a theme's colors into the given customizations object, first removing
- * any keys we previously set (in case an older theme used keys the new one
- * doesn't). Never touches keys we don't manage.
+ * Panel/tab/toolbar chrome colors, derived entirely from the theme's own
+ * palette — so the terminal tabs, title, borders, and the strip around the
+ * terminal all match the selected theme. No per-theme config needed: every
+ * theme already defines background, foreground, cursor, and ansiBrightBlack.
  */
-function mergeTheme(
+function chromeColorsFor(theme: RetroTheme): Record<string, string> {
+  const c = theme.colors;
+  const bg = c["terminal.background"];
+  const fg = c["terminal.foreground"];
+  const accent = c["terminalCursor.foreground"];
+  const dim = c["terminal.ansiBrightBlack"];
+  return {
+    // The whole bottom panel region (tabs strip + toolbar background)
+    "panel.background": bg,
+    "panel.border": dim,
+    "panelSection.border": dim,
+    // Panel title / active tab label + its underline
+    "panelTitle.activeForeground": fg,
+    "panelTitle.inactiveForeground": dim,
+    "panelTitle.activeBorder": accent,
+    // The terminal tab list on the right
+    "terminal.tab.activeBorder": accent,
+    "terminal.border": dim,
+    "terminalOverviewRuler.border": dim,
+  };
+}
+
+/** The full color set this extension writes for a theme: content + optional chrome. */
+function colorsFor(theme: RetroTheme): Record<string, string> {
+  return isImmersive() ? { ...theme.colors, ...chromeColorsFor(theme) } : { ...theme.colors };
+}
+
+/** Every key any theme could manage — used as a reset fallback if state is lost. */
+function allPossibleManagedKeys(): string[] {
+  return RETRO_THEMES.flatMap((t) => Object.keys({ ...t.colors, ...chromeColorsFor(t) }));
+}
+
+/**
+ * Merge a color set into the given customizations object, first removing any
+ * keys we previously set (in case the old theme/immersive-mode used keys the
+ * new one doesn't). Never touches keys we don't manage.
+ */
+function mergeColors(
   base: Record<string, unknown>,
-  theme: RetroTheme,
+  colors: Record<string, string>,
   previouslyManagedKeys: string[]
 ): Record<string, unknown> {
   const merged = { ...base };
   for (const key of previouslyManagedKeys) {
     delete merged[key];
   }
-  return { ...merged, ...theme.colors };
+  return { ...merged, ...colors };
 }
 
 /** Permanently apply a theme: write settings and record state. */
 async function applyTheme(theme: RetroTheme, announce: boolean): Promise<boolean> {
   const previousKeys = extensionContext.globalState.get<string[]>(STATE_MANAGED_KEYS, []);
-  const merged = mergeTheme(readGlobalColorCustomizations(), theme, previousKeys);
+  const colors = colorsFor(theme);
+  const merged = mergeColors(readGlobalColorCustomizations(), colors, previousKeys);
   try {
     await writeGlobalColorCustomizations(merged);
   } catch (err) {
@@ -64,7 +110,7 @@ async function applyTheme(theme: RetroTheme, announce: boolean): Promise<boolean
     return false;
   }
   await extensionContext.globalState.update(STATE_CURRENT_THEME, theme.name);
-  await extensionContext.globalState.update(STATE_MANAGED_KEYS, Object.keys(theme.colors));
+  await extensionContext.globalState.update(STATE_MANAGED_KEYS, Object.keys(colors));
   updateStatusBar();
   themesViewProvider?.refresh();
   if (announce) {
@@ -80,9 +126,7 @@ async function resetColors(): Promise<void> {
   const managedKeys = extensionContext.globalState.get<string[]>(STATE_MANAGED_KEYS, []);
   // Fall back to every key any built-in theme uses, in case state was lost.
   const keysToRemove = new Set(
-    managedKeys.length > 0
-      ? managedKeys
-      : RETRO_THEMES.flatMap((t) => Object.keys(t.colors))
+    managedKeys.length > 0 ? managedKeys : allPossibleManagedKeys()
   );
 
   const current = readGlobalColorCustomizations();
@@ -162,7 +206,7 @@ async function selectTheme(): Promise<void> {
       clearTimeout(previewTimer);
     }
     previewTimer = setTimeout(() => {
-      void queueWrite(mergeTheme(snapshot, item.theme, previousKeys));
+      void queueWrite(mergeColors(snapshot, colorsFor(item.theme), previousKeys));
     }, 80);
   });
 
@@ -440,7 +484,18 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.window.registerWebviewViewProvider(RetroThemesViewProvider.viewType, themesViewProvider),
     vscode.commands.registerCommand("retroTerminal.selectTheme", selectTheme),
     vscode.commands.registerCommand("retroTerminal.randomTheme", randomTheme),
-    vscode.commands.registerCommand("retroTerminal.resetColors", resetColors)
+    vscode.commands.registerCommand("retroTerminal.resetColors", resetColors),
+    // Re-apply the current theme when immersive mode is toggled, so the panel
+    // chrome is added or cleanly removed without touching the user's own keys.
+    vscode.workspace.onDidChangeConfiguration((e) => {
+      if (e.affectsConfiguration("retroTerminal.immersiveMode")) {
+        const name = extensionContext.globalState.get<string>(STATE_CURRENT_THEME);
+        const theme = RETRO_THEMES.find((t) => t.name === name);
+        if (theme) {
+          void applyTheme(theme, false);
+        }
+      }
+    })
   );
 }
 

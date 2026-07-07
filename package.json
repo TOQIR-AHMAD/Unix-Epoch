@@ -2,7 +2,7 @@
   "name": "retro-terminal-themes",
   "displayName": "Retro Terminal Themes",
   "description": "Give the VS Code integrated terminal a retro computing look — 20 themes spanning 1960 to 2010, from IBM mainframes to Solarized.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "publisher": "ToqirAhmad",
   "license": "MIT",
   "icon": "images/icon.png",
@@ -64,11 +64,22 @@
         "command": "retroTerminal.resetColors",
         "title": "Retro Terminal: Reset Terminal Colors"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Retro Terminal Themes",
+      "properties": {
+        "retroTerminal.immersiveMode": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Also tint the terminal **panel chrome** — the tabs strip, title, toolbar background, and borders — to match the selected theme, not just the terminal content area.\n\nNote: the bottom panel is shared, so this also tints the Problems / Output / Debug Console tabs. Turn it off to restyle only the terminal viewport."
+        }
+      }
+    }
   },
   "scripts": {
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
+    "previews": "npm run compile && node scripts/generate-previews.js",
     "vscode:prepublish": "npm run compile"
   },
   "devDependencies": {
