@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.1.0
+
+- Extension logo (pixel-art retro CRT)
+- Activity Bar icon with a CRT-styled sidebar theme browser: era groups, color swatches, search, one-click apply, reset button
+
 ## 1.0.0
 
 - Initial release

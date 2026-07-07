@@ -8,6 +8,7 @@ const STATE_MANAGED_KEYS = "retroTerminal.managedKeys";
 
 let statusBarItem: vscode.StatusBarItem;
 let extensionContext: vscode.ExtensionContext;
+let themesViewProvider: RetroThemesViewProvider | undefined;
 
 interface ThemeQuickPickItem extends vscode.QuickPickItem {
   theme: RetroTheme;
@@ -65,6 +66,7 @@ async function applyTheme(theme: RetroTheme, announce: boolean): Promise<boolean
   await extensionContext.globalState.update(STATE_CURRENT_THEME, theme.name);
   await extensionContext.globalState.update(STATE_MANAGED_KEYS, Object.keys(theme.colors));
   updateStatusBar();
+  themesViewProvider?.refresh();
   if (announce) {
     void vscode.window.showInformationMessage(
       `Retro Terminal: applied “${theme.name}” (${theme.year})`
@@ -105,6 +107,7 @@ async function resetColors(): Promise<void> {
   await extensionContext.globalState.update(STATE_CURRENT_THEME, undefined);
   await extensionContext.globalState.update(STATE_MANAGED_KEYS, undefined);
   updateStatusBar();
+  themesViewProvider?.refresh();
   void vscode.window.showInformationMessage("Retro Terminal: terminal colors reset.");
 }
 
@@ -207,6 +210,223 @@ function updateStatusBar(): void {
   statusBarItem.show();
 }
 
+/**
+ * Activity Bar sidebar: a CRT-styled webview listing every theme grouped by
+ * era. Clicking a theme applies it; the active one is highlighted.
+ */
+class RetroThemesViewProvider implements vscode.WebviewViewProvider {
+  public static readonly viewType = "retroTerminal.themesView";
+  private view: vscode.WebviewView | undefined;
+
+  public resolveWebviewView(webviewView: vscode.WebviewView): void {
+    this.view = webviewView;
+    webviewView.webview.options = { enableScripts: true };
+    webviewView.webview.html = this.buildHtml();
+
+    webviewView.webview.onDidReceiveMessage(async (message: { type: string; name?: string }) => {
+      if (message.type === "apply" && message.name) {
+        const theme = RETRO_THEMES.find((t) => t.name === message.name);
+        if (theme) {
+          await applyTheme(theme, false);
+        }
+      } else if (message.type === "reset") {
+        await resetColors();
+      }
+    });
+
+    webviewView.onDidChangeVisibility(() => {
+      if (webviewView.visible) {
+        this.refresh();
+      }
+    });
+    this.refresh();
+  }
+
+  /** Push the currently applied theme name so the view can mark it. */
+  public refresh(): void {
+    void this.view?.webview.postMessage({
+      type: "current",
+      name: extensionContext.globalState.get<string>(STATE_CURRENT_THEME) ?? null,
+    });
+  }
+
+  private buildHtml(): string {
+    const nonce = Array.from({ length: 32 }, () =>
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".charAt(Math.floor(Math.random() * 62))
+    ).join("");
+    const themesJson = JSON.stringify(
+      [...RETRO_THEMES]
+        .sort((a, b) => a.year - b.year || a.name.localeCompare(b.name))
+        .map((t) => ({
+          name: t.name,
+          year: t.year,
+          description: t.description,
+          bg: t.colors["terminal.background"],
+          fg: t.colors["terminal.foreground"],
+          dots: [
+            t.colors["terminal.ansiBrightRed"],
+            t.colors["terminal.ansiBrightYellow"],
+            t.colors["terminal.ansiBrightBlue"],
+          ],
+        }))
+    );
+    const currentName = JSON.stringify(
+      extensionContext.globalState.get<string>(STATE_CURRENT_THEME) ?? null
+    );
+
+    return /* html */ `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'nonce-${nonce}';">
+<style>
+  :root { --green: #33ff41; --dim: #1d8a28; --bg: #030903; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--green);
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+    text-shadow: 0 0 5px rgba(51, 255, 65, 0.45);
+    display: flex; flex-direction: column;
+  }
+  /* CRT scanlines over everything */
+  body::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 10;
+    background: repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,0.28) 2px 4px);
+  }
+  header { padding: 10px 10px 6px; border-bottom: 1px solid var(--dim); }
+  header h1 { font-size: 13px; letter-spacing: 1px; }
+  header h1::after { content: "█"; animation: blink 1.1s steps(1) infinite; margin-left: 4px; }
+  @keyframes blink { 50% { opacity: 0; } }
+  header .sub { color: var(--dim); margin-top: 2px; }
+  .search { padding: 8px 10px; }
+  .search input {
+    width: 100%; background: #000; color: var(--green);
+    border: 1px solid var(--dim); padding: 5px 7px;
+    font-family: inherit; font-size: 12px; outline: none;
+    text-shadow: inherit;
+  }
+  .search input:focus { border-color: var(--green); }
+  .search input::placeholder { color: var(--dim); }
+  main { flex: 1; overflow-y: auto; padding-bottom: 8px; }
+  .era {
+    color: var(--dim); padding: 10px 10px 4px; letter-spacing: 1px;
+    white-space: nowrap; overflow: hidden;
+  }
+  .row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 10px; cursor: pointer; border: 1px solid transparent;
+  }
+  .row:hover { background: rgba(51, 255, 65, 0.08); border-color: var(--dim); }
+  .row.active { background: rgba(51, 255, 65, 0.14); border-color: var(--green); }
+  .swatch {
+    width: 34px; height: 22px; flex: none;
+    border: 1px solid var(--dim); border-radius: 2px;
+    display: flex; align-items: center; justify-content: center; gap: 3px;
+  }
+  .swatch i { width: 5px; height: 5px; border-radius: 50%; display: block; }
+  .meta { min-width: 0; flex: 1; }
+  .name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .name .mark { display: inline-block; width: 12px; }
+  .desc { color: var(--dim); font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .year { color: var(--dim); flex: none; }
+  .row.active .year { color: var(--green); }
+  .empty { color: var(--dim); padding: 14px 10px; }
+  footer { padding: 8px 10px; border-top: 1px solid var(--dim); }
+  footer button {
+    width: 100%; background: #000; color: var(--green);
+    border: 1px solid var(--green); padding: 7px; cursor: pointer;
+    font-family: inherit; font-size: 12px; letter-spacing: 1px;
+    text-shadow: inherit;
+  }
+  footer button:hover { background: rgba(51, 255, 65, 0.15); }
+  footer button:active { background: var(--green); color: #000; text-shadow: none; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>RETRO TERMINAL</h1>
+    <div class="sub" id="count"></div>
+  </header>
+  <div class="search"><input id="search" type="text" placeholder="> SEARCH THEMES..." /></div>
+  <main id="list"></main>
+  <footer><button id="reset">[ RESET TERMINAL COLORS ]</button></footer>
+  <script nonce="${nonce}">
+    const vscode = acquireVsCodeApi();
+    const themes = ${themesJson};
+    let current = ${currentName};
+
+    function era(year) {
+      if (year < 1980) return "1960s\\u201370s";
+      if (year < 1990) return "1980s";
+      if (year < 2000) return "1990s";
+      return "2000s";
+    }
+    function esc(s) {
+      return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    const searchBox = document.getElementById("search");
+    const list = document.getElementById("list");
+    document.getElementById("count").textContent = themes.length + " THEMES \\u00B7 1964\\u20132010";
+
+    function render() {
+      const q = searchBox.value.trim().toLowerCase();
+      const filtered = themes.filter((t) =>
+        !q || t.name.toLowerCase().includes(q) || t.description.toLowerCase().includes(q) || String(t.year).includes(q)
+      );
+      if (!filtered.length) {
+        list.innerHTML = '<div class="empty">NO MATCH FOUND_</div>';
+        return;
+      }
+      let html = "", lastEra = "";
+      for (const t of filtered) {
+        const e = era(t.year);
+        if (e !== lastEra) {
+          lastEra = e;
+          html += '<div class="era">\\u2500\\u2500 ' + e + ' \\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500\\u2500</div>';
+        }
+        const active = t.name === current;
+        html +=
+          '<div class="row' + (active ? " active" : "") + '" data-name="' + esc(t.name) + '">' +
+            '<span class="swatch" style="background:' + esc(t.bg) + '">' +
+              t.dots.map((d) => '<i style="background:' + esc(d) + '"></i>').join("") +
+            "</span>" +
+            '<span class="meta">' +
+              '<div class="name"><span class="mark">' + (active ? "\\u25BA" : "") + "</span>" + esc(t.name) + "</div>" +
+              '<div class="desc">' + esc(t.description) + "</div>" +
+            "</span>" +
+            '<span class="year">' + t.year + "</span>" +
+          "</div>";
+      }
+      list.innerHTML = html;
+    }
+
+    list.addEventListener("click", (ev) => {
+      const row = ev.target.closest(".row");
+      if (row) {
+        vscode.postMessage({ type: "apply", name: row.dataset.name });
+      }
+    });
+    document.getElementById("reset").addEventListener("click", () => {
+      vscode.postMessage({ type: "reset" });
+    });
+    searchBox.addEventListener("input", render);
+    window.addEventListener("message", (ev) => {
+      if (ev.data && ev.data.type === "current") {
+        current = ev.data.name;
+        render();
+      }
+    });
+    render();
+  </script>
+</body>
+</html>`;
+  }
+}
+
 export function activate(context: vscode.ExtensionContext): void {
   extensionContext = context;
 
@@ -215,7 +435,9 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(statusBarItem);
   updateStatusBar();
 
+  themesViewProvider = new RetroThemesViewProvider();
   context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider(RetroThemesViewProvider.viewType, themesViewProvider),
     vscode.commands.registerCommand("retroTerminal.selectTheme", selectTheme),
     vscode.commands.registerCommand("retroTerminal.randomTheme", randomTheme),
     vscode.commands.registerCommand("retroTerminal.resetColors", resetColors)

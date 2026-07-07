@@ -2,9 +2,10 @@
   "name": "retro-terminal-themes",
   "displayName": "Retro Terminal Themes",
   "description": "Give the VS Code integrated terminal a retro computing look — 20 themes spanning 1960 to 2010, from IBM mainframes to Solarized.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publisher": "ToqirAhmad",
   "license": "MIT",
+  "icon": "images/icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/TOQIR-AHMAD/Unix-Epoch.git"
@@ -31,6 +32,25 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "retro-terminal",
+          "title": "Retro Terminal",
+          "icon": "images/activity-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "retro-terminal": [
+        {
+          "type": "webview",
+          "id": "retroTerminal.themesView",
+          "name": "Themes",
+          "icon": "images/activity-icon.svg"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "retroTerminal.selectTheme",

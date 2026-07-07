@@ -10,11 +10,16 @@ The extension only changes terminal color keys inside `workbench.colorCustomizat
 ## Features
 
 - 🎨 **20 hand-tuned retro palettes** — full 16-color ANSI set plus background, foreground, cursor, and selection for every theme
+- 🖥️ **Retro sidebar browser** — a CRT-styled panel in the Activity Bar with color swatches grouped by era, search, one-click apply, and a reset button
 - 👀 **Live preview** — arrow through the picker and the terminal restyles instantly; `Esc` restores what you had, `Enter` keeps it
 - 🎲 **Random theme** — feeling nostalgic but indecisive
 - 🧹 **Clean reset** — removes only the keys this extension set, never your own customizations
 - 📊 **Status bar item** — shows the active retro theme; click it to open the picker
 - ✅ The currently applied theme is marked with a check in the picker
+
+## Theme Browser (Activity Bar)
+
+Click the **terminal icon in the Activity Bar** to open the Retro Terminal sidebar — a green-phosphor CRT panel (scanlines included) listing all 20 themes grouped by era, each with a color swatch, name, year, and description. Click a theme to apply it instantly; the active one is marked with `►`. Type in the search box to filter by name, year, or description, and use **[ RESET TERMINAL COLORS ]** at the bottom to go back to defaults.
 
 ## Commands
 
