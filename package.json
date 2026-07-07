@@ -5,6 +5,10 @@
   "version": "1.0.0",
   "publisher": "ocm-software",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TOQIR-AHMAD/Unix-Epoch.git"
+  },
   "engines": {
     "vscode": "^1.75.0"
   },
