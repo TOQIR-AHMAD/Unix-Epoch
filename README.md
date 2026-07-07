@@ -21,36 +21,6 @@
 
 ---
 
-## Table of Contents
-
-- [Why Retro Terminal Themes](#why-retro-terminal-themes)
-- [Screenshots](#screenshots)
-- [Installation](#installation)
-- [Using the Theme Browser](#using-the-theme-browser)
-- [All 20 Themes](#all-20-themes)
-- [Color Palette Reference](#color-palette-reference)
-- [Adding Your Own Theme](#adding-your-own-theme)
-- [FAQ](#faq)
-- [Contributing & Development](#contributing--development)
-- [License](#license)
-
----
-
-## Why Retro Terminal Themes
-
-Theme extensions restyle your whole editor. This one restyles **only the integrated terminal** — so you keep the editor theme you love and give your shell a genuine piece of computing history.
-
-- 🕰️ **20 hand-tuned palettes across five decades** — from 1964 mainframe phosphor to 2010 Solarized.
-- 🎨 **Complete palettes** — every theme defines background, foreground, cursor, selection, and all **16 ANSI colors**, so `ls`, `git`, and your prompt all look right.
-- 🖥️ **CRT-styled sidebar browser** — scanlines included. Browse by era, see a live color swatch for every theme, and apply with one click.
-- 👀 **Live preview picker** — arrow through the Command Palette QuickPick and the terminal restyles instantly; `Esc` puts everything back.
-- 🎲 **Random theme** — feeling nostalgic but indecisive.
-- 🎛️ **Immersive mode** — themes the terminal **tabs, title, and toolbar chrome** too, not just the content area, so the whole terminal region matches. Toggle it with `retroTerminal.immersiveMode`.
-- ↩️ **Reversible & polite** — themes merge into `workbench.colorCustomizations` without touching your other customizations, and **Reset** removes only the keys this extension set.
-- 🆓 **Free & open source**, MIT licensed.
-
----
-
 ## Screenshots
 
 > Every mockup below is rendered from the theme's actual palette.
@@ -110,38 +80,6 @@ Prefer the command palette?
 
 ---
 
-## Using the Theme Browser
-
-- Click the **terminal icon** in the Activity Bar to open the retro sidebar — green phosphor, scanlines, blinking cursor.
-- Themes are **grouped by era** (1960s–70s · 1980s · 1990s · 2000s), each with a **color swatch** built from its real palette.
-- **Click any theme to apply it** — the active one is marked with `►`.
-- Use the **`> SEARCH THEMES...`** box to filter by name, year, or description.
-- **[ RESET TERMINAL COLORS ]** at the bottom removes everything this extension set and nothing else.
-
-### Immersive mode (themed tabs & toolbar)
-
-By default the extension also tints the **terminal panel chrome** — the tab strip, the active tab title, the toolbar background, and the borders — so the tabs and icons match the theme instead of staying your editor-theme color. Every color is pulled from the theme's own palette.
-
-Because VS Code's bottom panel is shared, this also tints the **Problems / Output / Debug Console** tabs that live next to the terminal. If you'd rather restyle only the terminal viewport, set:
-
-```jsonc
-"retroTerminal.immersiveMode": false
-```
-
-Toggling it re-applies the current theme and cleanly removes the chrome keys — your own customizations are never touched.
-
-You can also use the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`):
-
-| Command | What it does |
-| --- | --- |
-| `Retro Terminal: Select Theme` | QuickPick sorted by year with **live preview** — arrow keys preview, `Enter` applies, `Esc` restores |
-| `Retro Terminal: Random Theme` | Applies a random theme and tells you which one |
-| `Retro Terminal: Reset Terminal Colors` | Removes only this extension's terminal color keys |
-
-The **status bar** (bottom right) always shows the active retro theme — click it to open the picker.
-
----
-
 ## All 20 Themes
 
 Four eras, five decades, 20 machines worth of nostalgia.
@@ -159,74 +97,55 @@ Four eras, five decades, 20 machines worth of nostalgia.
 
 Every theme is a complete terminal palette — background, foreground, cursor, selection, and all 16 ANSI colors. A few of the highlights:
 
-### 🟠 DEC VT52 Amber
+<table>
+<tr>
+<td valign="top">
 
-| Role | Color | Hex |
-| --- | --- | --- |
-| Background | ⬛ | `#120B00` |
-| Foreground | 🟧 | `#FFB000` |
-| Cursor | 🟨 | `#FFCC33` |
-| Bright Red | 🟧 | `#FF8C1A` |
-| Bright Green | 🟧 | `#FFB733` |
-| Bright Yellow | 🟨 | `#FFD11A` |
-| Bright Blue | 🟫 | `#CC9933` |
+<b>🟠 DEC VT52 Amber</b>
+<table>
+<tr><th>Role</th><th>Color</th><th>Hex</th></tr>
+<tr><td>Background</td><td><img src="https://singlecolorimage.com/get/120B00/24x16" width="24" height="16"/></td><td><code>#120B00</code></td></tr>
+<tr><td>Foreground</td><td><img src="https://singlecolorimage.com/get/FFB000/24x16" width="24" height="16"/></td><td><code>#FFB000</code></td></tr>
+<tr><td>Cursor</td><td><img src="https://singlecolorimage.com/get/FFCC33/24x16" width="24" height="16"/></td><td><code>#FFCC33</code></td></tr>
+<tr><td>Bright Red</td><td><img src="https://singlecolorimage.com/get/FF8C1A/24x16" width="24" height="16"/></td><td><code>#FF8C1A</code></td></tr>
+<tr><td>Bright Green</td><td><img src="https://singlecolorimage.com/get/FFB733/24x16" width="24" height="16"/></td><td><code>#FFB733</code></td></tr>
+<tr><td>Bright Yellow</td><td><img src="https://singlecolorimage.com/get/FFD11A/24x16" width="24" height="16"/></td><td><code>#FFD11A</code></td></tr>
+<tr><td>Bright Blue</td><td><img src="https://singlecolorimage.com/get/CC9933/24x16" width="24" height="16"/></td><td><code>#CC9933</code></td></tr>
+</table>
 
-### 🔵 Commodore 64
+</td>
+<td valign="top">
 
-| Role | Color | Hex |
-| --- | --- | --- |
-| Background | 🟦 | `#40318D` |
-| Foreground | 🟪 | `#7869C4` |
-| Cursor | 🟪 | `#7869C4` |
-| Red | 🟥 | `#883932` |
-| Green | 🟩 | `#55A049` |
-| Yellow | 🟨 | `#BFCE72` |
-| Cyan | 🟦 | `#67B6BD` |
+<b>🔵 Commodore 64</b>
+<table>
+<tr><th>Role</th><th>Color</th><th>Hex</th></tr>
+<tr><td>Background</td><td><img src="https://singlecolorimage.com/get/40318D/24x16" width="24" height="16"/></td><td><code>#40318D</code></td></tr>
+<tr><td>Foreground</td><td><img src="https://singlecolorimage.com/get/7869C4/24x16" width="24" height="16"/></td><td><code>#7869C4</code></td></tr>
+<tr><td>Cursor</td><td><img src="https://singlecolorimage.com/get/7869C4/24x16" width="24" height="16"/></td><td><code>#7869C4</code></td></tr>
+<tr><td>Red</td><td><img src="https://singlecolorimage.com/get/883932/24x16" width="24" height="16"/></td><td><code>#883932</code></td></tr>
+<tr><td>Green</td><td><img src="https://singlecolorimage.com/get/55A049/24x16" width="24" height="16"/></td><td><code>#55A049</code></td></tr>
+<tr><td>Yellow</td><td><img src="https://singlecolorimage.com/get/BFCE72/24x16" width="24" height="16"/></td><td><code>#BFCE72</code></td></tr>
+<tr><td>Cyan</td><td><img src="https://singlecolorimage.com/get/67B6BD/24x16" width="24" height="16"/></td><td><code>#67B6BD</code></td></tr>
+</table>
 
-### 🌒 Solarized Dark
+</td>
+<td valign="top">
 
-| Role | Color | Hex |
-| --- | --- | --- |
-| Background | 🟦 | `#002B36` |
-| Foreground | ⬜ | `#839496` |
-| Cursor | ⬜ | `#93A1A1` |
-| Red | 🟥 | `#DC322F` |
-| Green | 🟩 | `#859900` |
-| Yellow | 🟨 | `#B58900` |
-| Blue | 🟦 | `#268BD2` |
+<b>🌒 Solarized Dark</b>
+<table>
+<tr><th>Role</th><th>Color</th><th>Hex</th></tr>
+<tr><td>Background</td><td><img src="https://singlecolorimage.com/get/002B36/24x16" width="24" height="16"/></td><td><code>#002B36</code></td></tr>
+<tr><td>Foreground</td><td><img src="https://singlecolorimage.com/get/839496/24x16" width="24" height="16"/></td><td><code>#839496</code></td></tr>
+<tr><td>Cursor</td><td><img src="https://singlecolorimage.com/get/93A1A1/24x16" width="24" height="16"/></td><td><code>#93A1A1</code></td></tr>
+<tr><td>Red</td><td><img src="https://singlecolorimage.com/get/DC322F/24x16" width="24" height="16"/></td><td><code>#DC322F</code></td></tr>
+<tr><td>Green</td><td><img src="https://singlecolorimage.com/get/859900/24x16" width="24" height="16"/></td><td><code>#859900</code></td></tr>
+<tr><td>Yellow</td><td><img src="https://singlecolorimage.com/get/B58900/24x16" width="24" height="16"/></td><td><code>#B58900</code></td></tr>
+<tr><td>Blue</td><td><img src="https://singlecolorimage.com/get/268BD2/24x16" width="24" height="16"/></td><td><code>#268BD2</code></td></tr>
+</table>
 
----
-
-## Adding Your Own Theme
-
-Every theme lives in one self-contained block in [`src/themes.ts`](src/themes.ts) — no logic changes needed, ever.
-
-1. Open `src/themes.ts`.
-2. Copy any existing theme block inside the `RETRO_THEMES` array and paste it where you like.
-3. Change `name`, `year`, `description`, and the 20 hex values in `colors`:
-   - `terminal.background`, `terminal.foreground`, `terminalCursor.foreground`, `terminal.selectionBackground`
-   - the 16 ANSI keys: `terminal.ansiBlack` … `terminal.ansiBrightWhite`
-4. Recompile (`npm run compile` or the running watch task) and reload.
-
-That's it. The sidebar browser, live-preview picker, random command, status bar, and reset all pick the new theme up automatically. Example:
-
-```ts
-{
-  name: "My Teletype",
-  year: 1971,
-  description: "Ink on paper",
-  colors: {
-    "terminal.background": "#f5f0e6",
-    "terminal.foreground": "#222222",
-    "terminalCursor.foreground": "#222222",
-    "terminal.selectionBackground": "#c9bfa899",
-    "terminal.ansiBlack": "#222222",
-    // ... the remaining 15 ANSI colors
-  }
-},
-```
-
-Tip: `terminal.selectionBackground` accepts 8-digit hex (`#rrggbbaa`) for translucent selections.
+</td>
+</tr>
+</table>
 
 ---
 
@@ -245,24 +164,7 @@ Yes, because they live in your user settings. Run **Retro Terminal: Reset Termin
 High-contrast picks like **Hacker Green (Matrix)**, **DEC VT52 Amber**, **Apple II Green**, or **IBM PC DOS** read beautifully on a projector.
 
 **Can I request a theme?**
-Absolutely — open an issue on the [repository](https://github.com/TOQIR-AHMAD/Unix-Epoch), or add it yourself in one minute (see [Adding Your Own Theme](#adding-your-own-theme)).
-
----
-
-## Contributing & Development
-
-```bash
-npm install          # install dev dependencies
-npm run compile      # build the extension
-npm run watch        # rebuild on save
-npm run previews     # regenerate the README preview mockups (HTML)
-```
-
-- All 20 themes live in [`src/themes.ts`](src/themes.ts) — one typed block per theme, zero logic.
-- README preview mockups are generated by [`scripts/generate-previews.js`](scripts/generate-previews.js) from the real palettes, then screenshotted from a browser.
-- Press **F5** in VS Code to launch an Extension Development Host with the extension loaded.
-
-Issues and pull requests are welcome at [github.com/TOQIR-AHMAD/Unix-Epoch](https://github.com/TOQIR-AHMAD/Unix-Epoch).
+Absolutely — open an issue on the [repository](https://github.com/TOQIR-AHMAD/Unix-Epoch).
 
 ---
 
