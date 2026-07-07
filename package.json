@@ -1,0 +1,55 @@
+{
+  "name": "retro-terminal-themes",
+  "displayName": "Retro Terminal Themes",
+  "description": "Give the VS Code integrated terminal a retro computing look — 20 themes spanning 1960 to 2010, from IBM mainframes to Solarized.",
+  "version": "1.0.0",
+  "publisher": "ocm-software",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Themes",
+    "Other"
+  ],
+  "keywords": [
+    "terminal",
+    "retro",
+    "theme",
+    "colors",
+    "amber",
+    "phosphor",
+    "crt",
+    "vintage"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "retroTerminal.selectTheme",
+        "title": "Retro Terminal: Select Theme"
+      },
+      {
+        "command": "retroTerminal.randomTheme",
+        "title": "Retro Terminal: Random Theme"
+      },
+      {
+        "command": "retroTerminal.resetColors",
+        "title": "Retro Terminal: Reset Terminal Colors"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/vscode": "^1.75.0",
+    "typescript": "^5.4.0"
+  }
+}
