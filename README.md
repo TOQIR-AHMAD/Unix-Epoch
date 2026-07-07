@@ -163,6 +163,9 @@ Yes, because they live in your user settings. Run **Retro Terminal: Reset Termin
 **Which theme is best for presentations or screencasts?**
 High-contrast picks like **Hacker Green (Matrix)**, **DEC VT52 Amber**, **Apple II Green**, or **IBM PC DOS** read beautifully on a projector.
 
+**Why doesn't the font look as retro as the screenshots?**
+Each theme also sets an era-appropriate terminal font (`terminal.integrated.fontFamily`). For the full effect, install the free fonts it prefers — [VT323](https://fonts.google.com/specimen/VT323), [IBM Plex Mono](https://fonts.google.com/specimen/IBM+Plex+Mono), [Share Tech Mono](https://fonts.google.com/specimen/Share+Tech+Mono), [Courier Prime](https://fonts.google.com/specimen/Courier+Prime), and [Ubuntu Mono](https://fonts.google.com/specimen/Ubuntu+Mono) — otherwise the terminal falls back to your default monospace. Prefer your own font? Set `"retroTerminal.themeFont": false`.
+
 **Can I request a theme?**
 Absolutely — open an issue on the [repository](https://github.com/TOQIR-AHMAD/Unix-Epoch).
 

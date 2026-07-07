@@ -10,6 +10,14 @@ export interface RetroTheme {
   name: string;
   year: number;
   description: string;
+  /**
+   * Terminal font stack for this theme (era-appropriate). Applied to
+   * `terminal.integrated.fontFamily`. The first name is the ideal font; the
+   * rest are fallbacks, always ending in a generic family, so the terminal
+   * stays readable even when the ideal font isn't installed. Free fonts like
+   * VT323, IBM Plex Mono, and Ubuntu Mono give the full effect once installed.
+   */
+  font: string;
   colors: Record<string, string>;
 }
 
@@ -19,6 +27,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "IBM Mainframe",
     year: 1964,
     description: "System/360 console — cold white and blue phosphor on black",
+    font: '"IBM Plex Mono", "Consolas", monospace',
     colors: {
       "terminal.background": "#0a0e14",
       "terminal.foreground": "#d6e4f0",
@@ -46,6 +55,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "Punch Card Beige",
     year: 1965,
     description: "IBM punched card stock — dark brown ink on cream manila",
+    font: '"Courier Prime", "Courier New", monospace',
     colors: {
       "terminal.background": "#f3e5c3",
       "terminal.foreground": "#4a3524",
@@ -73,6 +83,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "DEC VT52 Amber",
     year: 1975,
     description: "Warm amber phosphor glow of DEC video terminals",
+    font: '"VT323", "Consolas", monospace',
     colors: {
       "terminal.background": "#120b00",
       "terminal.foreground": "#ffb000",
@@ -100,6 +111,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "Apple II Green",
     year: 1977,
     description: "Classic green P1 phosphor of the Apple ][ monitor",
+    font: '"VT323", "Consolas", monospace',
     colors: {
       "terminal.background": "#071004",
       "terminal.foreground": "#33ff33",
@@ -128,6 +140,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "IBM PC DOS",
     year: 1981,
     description: "The original PC-DOS prompt — light grey on true black",
+    font: '"IBM Plex Mono", "Consolas", monospace',
     colors: {
       "terminal.background": "#000000",
       "terminal.foreground": "#aaaaaa",
@@ -155,6 +168,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "Commodore 64",
     year: 1982,
     description: "READY. — light blue text on the famous deep blue screen",
+    font: '"VT323", "Consolas", monospace',
     colors: {
       "terminal.background": "#40318d",
       "terminal.foreground": "#7869c4",
@@ -182,6 +196,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "ZX Spectrum",
     year: 1982,
     description: "Sinclair's rubber-key wonder — saturated primaries on black",
+    font: '"VT323", "Consolas", monospace',
     colors: {
       "terminal.background": "#000000",
       "terminal.foreground": "#c8c8c8",
@@ -209,6 +224,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "Apple Macintosh",
     year: 1984,
     description: "Hello — crisp black on the light grey of the original Mac",
+    font: '"Monaco", "Courier Prime", monospace',
     colors: {
       "terminal.background": "#eeeeee",
       "terminal.foreground": "#1a1a1a",
@@ -236,6 +252,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "CGA Magenta",
     year: 1984,
     description: "CGA palette 1 — cyan, magenta, and white on black",
+    font: '"IBM Plex Mono", "Consolas", monospace',
     colors: {
       "terminal.background": "#000000",
       "terminal.foreground": "#ffffff",
@@ -263,6 +280,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "Amiga Workbench",
     year: 1985,
     description: "Workbench 1.x — blue-grey desktop with orange and white",
+    font: '"Share Tech Mono", "Consolas", monospace',
     colors: {
       "terminal.background": "#0055aa",
       "terminal.foreground": "#ffffff",
@@ -291,6 +309,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "Turbo Pascal",
     year: 1990,
     description: "Borland's IDE — yellow on blue, F1 for Help",
+    font: '"IBM Plex Mono", "Consolas", monospace',
     colors: {
       "terminal.background": "#0000a8",
       "terminal.foreground": "#ffff55",
@@ -318,6 +337,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "Windows 3.1",
     year: 1992,
     description: "Program Manager era — white text on navy blue",
+    font: '"Consolas", "Courier New", monospace',
     colors: {
       "terminal.background": "#000080",
       "terminal.foreground": "#ffffff",
@@ -345,6 +365,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "Norton Commander",
     year: 1993,
     description: "Twin-panel file manager blue with cyan panels and yellow highlights",
+    font: '"IBM Plex Mono", "Consolas", monospace',
     colors: {
       "terminal.background": "#0000a8",
       "terminal.foreground": "#00fcfc",
@@ -372,6 +393,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "Windows 95 Console",
     year: 1995,
     description: "command.com in a window — silver-grey on black",
+    font: '"Lucida Console", "Consolas", monospace',
     colors: {
       "terminal.background": "#010101",
       "terminal.foreground": "#c0c0c0",
@@ -399,6 +421,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "Hacker Green (Matrix)",
     year: 1999,
     description: "Follow the white rabbit — #00ff41 rain on pure black",
+    font: '"VT323", "Share Tech Mono", monospace',
     colors: {
       "terminal.background": "#000000",
       "terminal.foreground": "#00ff41",
@@ -427,6 +450,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "Windows XP Luna",
     year: 2001,
     description: "Bliss-era soft blues — gentle and friendly",
+    font: '"Consolas", "Segoe UI", monospace',
     colors: {
       "terminal.background": "#dce8f5",
       "terminal.foreground": "#1a3c6e",
@@ -454,6 +478,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "OS X Aqua Terminal",
     year: 2001,
     description: "Terminal.app defaults — plain black on white, Aqua era",
+    font: '"Monaco", "Menlo", monospace',
     colors: {
       "terminal.background": "#ffffff",
       "terminal.foreground": "#000000",
@@ -481,6 +506,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "Ubuntu Human",
     year: 2004,
     description: "Warty-era aubergine with Human-theme orange accents",
+    font: '"Ubuntu Mono", "Consolas", monospace',
     colors: {
       "terminal.background": "#300a24",
       "terminal.foreground": "#eeeeec",
@@ -508,6 +534,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "Solarized Dark",
     year: 2010,
     description: "Ethan Schoonover's precision dark palette",
+    font: '"Cascadia Code", "Consolas", monospace',
     colors: {
       "terminal.background": "#002b36",
       "terminal.foreground": "#839496",
@@ -535,6 +562,7 @@ export const RETRO_THEMES: RetroTheme[] = [
     name: "Solarized Light",
     year: 2010,
     description: "The light variant — same 16 colors, inverted base tones",
+    font: '"Cascadia Code", "Consolas", monospace',
     colors: {
       "terminal.background": "#fdf6e3",
       "terminal.foreground": "#657b83",

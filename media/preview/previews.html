@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono&family=Share+Tech+Mono&family=Courier+Prime&family=Ubuntu+Mono&display=swap" rel="stylesheet">
 <style>
   body { margin: 0; padding: 24px; background: #101010; font-family: Consolas, "Courier New", monospace; display: flex; flex-direction: column; gap: 32px; align-items: flex-start; }
   .scan { position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,0.22) 2px 4px); border-radius: inherit; }
@@ -17,10 +20,11 @@
   .mini-label { color: #9aa08a; font-size: 13px; letter-spacing: 1px; }
 
   .shot { width: 820px; }
-  .win { border: 1px solid #333; border-radius: 10px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,.6); }
-  .titlebar { background: #1c1c1c; padding: 9px 12px; display: flex; align-items: center; gap: 7px; }
-  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
-  .title { color: #8a8a8a; font-size: 12px; letter-spacing: 1px; margin-left: 10px; }
+  .win { border-radius: 10px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,.6); }
+  .toolbar { padding: 0 12px; height: 36px; display: flex; align-items: stretch; justify-content: space-between; font-size: 12px; }
+  .tab { display: inline-flex; align-items: center; gap: 8px; padding: 0 4px; letter-spacing: .5px; }
+  .tico { width: 11px; height: 11px; border-radius: 2px; display: inline-block; }
+  .tools { display: inline-flex; align-items: center; font-size: 13px; letter-spacing: 2px; }
   .term { position: relative; padding: 18px 20px 22px; font-size: 15px; line-height: 1.65; text-shadow: 0 0 3px rgba(255,255,255,.15); }
   .cursor { display: inline-block; }
 </style></head>
@@ -73,12 +77,14 @@
 </div>
 
   <div class="shot" id="shot-dec-vt52-amber">
-    <div class="win">
-      <div class="titlebar">
-        <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
-        <span class="title">TERMINAL — DEC VT52 AMBER · 1975</span>
+    <div class="win" style="border:1px solid #544f47">
+      <div class="toolbar" style="background:#2a231a;border-bottom:1px solid #544f47">
+        <span class="tab" style="color:#ffb000;border-bottom:2px solid #ffcc33">
+          <span class="tico" style="background:#ffcc33"></span>pwsh — DEC VT52 Amber · 1975
+        </span>
+        <span class="tools" style="color:#7d5500">+ &nbsp;⌄&nbsp; ▭ &nbsp;🗑&nbsp; ⋯ &nbsp;✕</span>
       </div>
-      <div class="term" style="background:#120b00;color:#ffb000">
+      <div class="term" style='background:#120b00;color:#ffb000;font-family:"VT323", "Consolas", monospace'>
 <div><span style="color:#ffb000">$ </span><span style="color:#ffc966">retro-terminal</span><span style="color:#ffb000"> --theme </span><span style="color:#ffd11a">"DEC VT52 Amber"</span></div>
 <div><span style="color:#ffb733">  ✔ applied</span><span style="color:#664400">  # Warm amber phosphor glow of DEC video terminals</span></div>
 <div><span style="color:#ffb000">$ ls</span></div>
@@ -95,12 +101,14 @@
   </div>
 
   <div class="shot" id="shot-apple-ii-green">
-    <div class="win">
-      <div class="titlebar">
-        <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
-        <span class="title">TERMINAL — APPLE II GREEN · 1977</span>
+    <div class="win" style="border:1px solid #4c534a">
+      <div class="toolbar" style="background:#20281d;border-bottom:1px solid #4c534a">
+        <span class="tab" style="color:#33ff33;border-bottom:2px solid #66ff66">
+          <span class="tico" style="background:#66ff66"></span>pwsh — Apple II Green · 1977
+        </span>
+        <span class="tools" style="color:#1b7c19">+ &nbsp;⌄&nbsp; ▭ &nbsp;🗑&nbsp; ⋯ &nbsp;✕</span>
       </div>
-      <div class="term" style="background:#071004;color:#33ff33">
+      <div class="term" style='background:#071004;color:#33ff33;font-family:"VT323", "Consolas", monospace'>
 <div><span style="color:#33ff33">$ </span><span style="color:#70ff70">retro-terminal</span><span style="color:#33ff33"> --theme </span><span style="color:#52ff52">"Apple II Green"</span></div>
 <div><span style="color:#66ff66">  ✔ applied</span><span style="color:#146614">  # Classic green P1 phosphor of the Apple ][ monitor</span></div>
 <div><span style="color:#33ff33">$ ls</span></div>
@@ -117,12 +125,14 @@
   </div>
 
   <div class="shot" id="shot-commodore-64">
-    <div class="win">
-      <div class="titlebar">
-        <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
-        <span class="title">TERMINAL — COMMODORE 64 · 1982</span>
+    <div class="win" style="border:1px solid #756bad">
+      <div class="toolbar" style="background:#534698;border-bottom:1px solid #756bad">
+        <span class="tab" style="color:#7869c4;border-bottom:2px solid #7869c4">
+          <span class="tico" style="background:#7869c4"></span>pwsh — Commodore 64 · 1982
+        </span>
+        <span class="tools" style="color:#594aa6">+ &nbsp;⌄&nbsp; ▭ &nbsp;🗑&nbsp; ⋯ &nbsp;✕</span>
       </div>
-      <div class="term" style="background:#40318d;color:#7869c4">
+      <div class="term" style='background:#40318d;color:#7869c4;font-family:"VT323", "Consolas", monospace'>
 <div><span style="color:#7869c4">$ </span><span style="color:#a3e6ed">retro-terminal</span><span style="color:#7869c4"> --theme </span><span style="color:#ffffb2">"Commodore 64"</span></div>
 <div><span style="color:#94e089">  ✔ applied</span><span style="color:#575757">  # READY. — light blue text on the famous deep blue screen</span></div>
 <div><span style="color:#7869c4">$ ls</span></div>
@@ -139,12 +149,14 @@
   </div>
 
   <div class="shot" id="shot-turbo-pascal">
-    <div class="win">
-      <div class="titlebar">
-        <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
-        <span class="title">TERMINAL — TURBO PASCAL · 1990</span>
+    <div class="win" style="border:1px solid #4747c0">
+      <div class="toolbar" style="background:#1a1ab1;border-bottom:1px solid #4747c0">
+        <span class="tab" style="color:#ffff55;border-bottom:2px solid #ffff55">
+          <span class="tico" style="background:#ffff55"></span>pwsh — Turbo Pascal · 1990
+        </span>
+        <span class="tools" style="color:#737383">+ &nbsp;⌄&nbsp; ▭ &nbsp;🗑&nbsp; ⋯ &nbsp;✕</span>
       </div>
-      <div class="term" style="background:#0000a8;color:#ffff55">
+      <div class="term" style='background:#0000a8;color:#ffff55;font-family:"IBM Plex Mono", "Consolas", monospace'>
 <div><span style="color:#ffff55">$ </span><span style="color:#54fcfc">retro-terminal</span><span style="color:#ffff55"> --theme </span><span style="color:#fcfc54">"Turbo Pascal"</span></div>
 <div><span style="color:#54fc54">  ✔ applied</span><span style="color:#545454">  # Borland's IDE — yellow on blue, F1 for Help</span></div>
 <div><span style="color:#ffff55">$ ls</span></div>
@@ -161,12 +173,14 @@
   </div>
 
   <div class="shot" id="shot-hacker-green-matrix">
-    <div class="win">
-      <div class="titlebar">
-        <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
-        <span class="title">TERMINAL — HACKER GREEN (MATRIX) · 1999</span>
+    <div class="win" style="border:1px solid #474747">
+      <div class="toolbar" style="background:#1a1a1a;border-bottom:1px solid #474747">
+        <span class="tab" style="color:#00ff41;border-bottom:2px solid #00ff41">
+          <span class="tico" style="background:#00ff41"></span>pwsh — Hacker Green (Matrix) · 1999
+        </span>
+        <span class="tools" style="color:#00731d">+ &nbsp;⌄&nbsp; ▭ &nbsp;🗑&nbsp; ⋯ &nbsp;✕</span>
       </div>
-      <div class="term" style="background:#000000;color:#00ff41">
+      <div class="term" style='background:#000000;color:#00ff41;font-family:"VT323", "Share Tech Mono", monospace'>
 <div><span style="color:#00ff41">$ </span><span style="color:#7fffa0">retro-terminal</span><span style="color:#00ff41"> --theme </span><span style="color:#44ff6e">"Hacker Green (Matrix)"</span></div>
 <div><span style="color:#66ff8c">  ✔ applied</span><span style="color:#003b09">  # Follow the white rabbit — #00ff41 rain on pure black</span></div>
 <div><span style="color:#00ff41">$ ls</span></div>
@@ -183,12 +197,14 @@
   </div>
 
   <div class="shot" id="shot-solarized-dark">
-    <div class="win">
-      <div class="titlebar">
-        <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
-        <span class="title">TERMINAL — SOLARIZED DARK · 2010</span>
+    <div class="win" style="border:1px solid #47666e">
+      <div class="toolbar" style="background:#1a404a;border-bottom:1px solid #47666e">
+        <span class="tab" style="color:#839496;border-bottom:2px solid #93a1a1">
+          <span class="tico" style="background:#93a1a1"></span>pwsh — Solarized Dark · 2010
+        </span>
+        <span class="tools" style="color:#3b5a61">+ &nbsp;⌄&nbsp; ▭ &nbsp;🗑&nbsp; ⋯ &nbsp;✕</span>
       </div>
-      <div class="term" style="background:#002b36;color:#839496">
+      <div class="term" style='background:#002b36;color:#839496;font-family:"Cascadia Code", "Consolas", monospace'>
 <div><span style="color:#839496">$ </span><span style="color:#93a1a1">retro-terminal</span><span style="color:#839496"> --theme </span><span style="color:#657b83">"Solarized Dark"</span></div>
 <div><span style="color:#586e75">  ✔ applied</span><span style="color:#002b36">  # Ethan Schoonover's precision dark palette</span></div>
 <div><span style="color:#839496">$ ls</span></div>

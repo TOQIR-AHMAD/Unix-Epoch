@@ -19,6 +19,28 @@ const HERO_MINIS = ["DEC VT52 Amber", "Apple II Green", "Commodore 64", "Turbo P
 const slug = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const byName = (name) => RETRO_THEMES.find((t) => t.name === name);
 
+// Same chrome-shade math as src/extension.ts, so the README mockups match VS Code.
+const hexToRgb = (hex) => {
+  const h = hex.replace("#", "");
+  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+};
+const rgbToHex = (r, g, b) => {
+  const c = (n) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, "0");
+  return `#${c(r)}${c(g)}${c(b)}`;
+};
+const luminance = (hex) => {
+  const [r, g, b] = hexToRgb(hex);
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+};
+const mix = (from, to, amt) => {
+  const [r1, g1, b1] = hexToRgb(from);
+  const [r2, g2, b2] = hexToRgb(to);
+  return rgbToHex(r1 + (r2 - r1) * amt, g1 + (g2 - g1) * amt, b1 + (b2 - b1) * amt);
+};
+const shade = (hex, amt) => (luminance(hex) < 0.5 ? mix(hex, "#ffffff", amt) : mix(hex, "#000000", amt));
+const toolbarBgFor = (bg) => shade(bg, 0.1);
+const borderFor = (bg) => shade(bg, 0.28);
+
 function terminalBody(t) {
   const c = t.colors;
   const span = (key, text) => `<span style="color:${c[key]}">${text}</span>`;
@@ -39,14 +61,22 @@ function terminalBody(t) {
 
 function shot(t) {
   const c = t.colors;
+  const bg = c["terminal.background"];
+  const fg = c["terminal.foreground"];
+  const accent = c["terminalCursor.foreground"];
+  const tbg = toolbarBgFor(bg);
+  const bd = borderFor(bg);
+  const muted = mix(fg, bg, 0.55);
   return `
   <div class="shot" id="shot-${slug(t.name)}">
-    <div class="win">
-      <div class="titlebar">
-        <span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>
-        <span class="title">TERMINAL — ${t.name.toUpperCase()} · ${t.year}</span>
+    <div class="win" style="border:1px solid ${bd}">
+      <div class="toolbar" style="background:${tbg};border-bottom:1px solid ${bd}">
+        <span class="tab" style="color:${fg};border-bottom:2px solid ${accent}">
+          <span class="tico" style="background:${accent}"></span>pwsh — ${t.name} · ${t.year}
+        </span>
+        <span class="tools" style="color:${muted}">+ &nbsp;⌄&nbsp; ▭ &nbsp;🗑&nbsp; ⋯ &nbsp;✕</span>
       </div>
-      <div class="term" style="background:${c["terminal.background"]};color:${c["terminal.foreground"]}">
+      <div class="term" style='background:${bg};color:${fg};font-family:${t.font}'>
 ${terminalBody(t)}
         <div class="scan"></div>
       </div>
@@ -70,6 +100,9 @@ function heroMini(t) {
 
 const html = `<!DOCTYPE html>
 <html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono&family=Share+Tech+Mono&family=Courier+Prime&family=Ubuntu+Mono&display=swap" rel="stylesheet">
 <style>
   body { margin: 0; padding: 24px; background: #101010; font-family: Consolas, "Courier New", monospace; display: flex; flex-direction: column; gap: 32px; align-items: flex-start; }
   .scan { position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,0.22) 2px 4px); border-radius: inherit; }
@@ -87,10 +120,11 @@ const html = `<!DOCTYPE html>
   .mini-label { color: #9aa08a; font-size: 13px; letter-spacing: 1px; }
 
   .shot { width: 820px; }
-  .win { border: 1px solid #333; border-radius: 10px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,.6); }
-  .titlebar { background: #1c1c1c; padding: 9px 12px; display: flex; align-items: center; gap: 7px; }
-  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
-  .title { color: #8a8a8a; font-size: 12px; letter-spacing: 1px; margin-left: 10px; }
+  .win { border-radius: 10px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,.6); }
+  .toolbar { padding: 0 12px; height: 36px; display: flex; align-items: stretch; justify-content: space-between; font-size: 12px; }
+  .tab { display: inline-flex; align-items: center; gap: 8px; padding: 0 4px; letter-spacing: .5px; }
+  .tico { width: 11px; height: 11px; border-radius: 2px; display: inline-block; }
+  .tools { display: inline-flex; align-items: center; font-size: 13px; letter-spacing: 2px; }
   .term { position: relative; padding: 18px 20px 22px; font-size: 15px; line-height: 1.65; text-shadow: 0 0 3px rgba(255,255,255,.15); }
   .cursor { display: inline-block; }
 </style></head>

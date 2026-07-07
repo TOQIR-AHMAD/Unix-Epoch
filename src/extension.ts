@@ -5,6 +5,10 @@ import { RETRO_THEMES, RetroTheme } from "./themes";
 const STATE_CURRENT_THEME = "retroTerminal.currentTheme";
 /** globalState key: the colorCustomizations keys this extension wrote, so Reset removes only ours. */
 const STATE_MANAGED_KEYS = "retroTerminal.managedKeys";
+/** globalState key: whether we currently own terminal.integrated.fontFamily. */
+const STATE_FONT_MANAGED = "retroTerminal.fontManaged";
+/** globalState key: the user's fontFamily from before we first changed it, to restore on reset. */
+const STATE_PREV_FONT = "retroTerminal.prevFontFamily";
 
 let statusBarItem: vscode.StatusBarItem;
 let extensionContext: vscode.ExtensionContext;
@@ -41,31 +45,110 @@ function isImmersive(): boolean {
     .get<boolean>("immersiveMode", true);
 }
 
+/** True when the user wants each theme's era-appropriate terminal font applied. */
+function isThemeFont(): boolean {
+  return vscode.workspace
+    .getConfiguration("retroTerminal")
+    .get<boolean>("themeFont", true);
+}
+
+/**
+ * Apply (or clear) the terminal font for a theme. We remember the user's own
+ * fontFamily the first time we take it over, and restore it exactly on reset —
+ * so turning the extension off leaves the terminal font as it was.
+ */
+async function applyFont(theme: RetroTheme | undefined): Promise<void> {
+  const cfg = vscode.workspace.getConfiguration("terminal.integrated");
+  const fontManaged = extensionContext.globalState.get<boolean>(STATE_FONT_MANAGED, false);
+
+  try {
+    if (theme && isThemeFont()) {
+      if (!fontManaged) {
+        // First time taking over: stash whatever the user had (may be undefined).
+        const prev = cfg.inspect<string>("fontFamily")?.globalValue;
+        await extensionContext.globalState.update(STATE_PREV_FONT, prev ?? null);
+        await extensionContext.globalState.update(STATE_FONT_MANAGED, true);
+      }
+      await cfg.update("fontFamily", theme.font, vscode.ConfigurationTarget.Global);
+    } else if (fontManaged) {
+      // Restore the user's original font (undefined removes our override).
+      const prev = extensionContext.globalState.get<string | null>(STATE_PREV_FONT, null);
+      await cfg.update("fontFamily", prev ?? undefined, vscode.ConfigurationTarget.Global);
+      await extensionContext.globalState.update(STATE_FONT_MANAGED, false);
+      await extensionContext.globalState.update(STATE_PREV_FONT, undefined);
+    }
+  } catch (err) {
+    void vscode.window.showErrorMessage(
+      `Retro Terminal: failed to update terminal font — ${err instanceof Error ? err.message : String(err)}`
+    );
+  }
+}
+
+// ── Small color helpers, so chrome shades derive from each theme's own bg ──
+function hexToRgb(hex: string): [number, number, number] {
+  const h = hex.replace("#", "");
+  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+}
+function rgbToHex(r: number, g: number, b: number): string {
+  const clamp = (n: number) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, "0");
+  return `#${clamp(r)}${clamp(g)}${clamp(b)}`;
+}
+/** Perceived brightness, 0 (black) → 1 (white). */
+function luminance(hex: string): number {
+  const [r, g, b] = hexToRgb(hex);
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+}
+/** Blend two colors: amt 0 = from, 1 = to. */
+function mix(from: string, to: string, amt: number): string {
+  const [r1, g1, b1] = hexToRgb(from);
+  const [r2, g2, b2] = hexToRgb(to);
+  return rgbToHex(r1 + (r2 - r1) * amt, g1 + (g2 - g1) * amt, b1 + (b2 - b1) * amt);
+}
+/** Nudge a color toward white if it's dark, toward black if it's light. */
+function shade(hex: string, amt: number): string {
+  return luminance(hex) < 0.5 ? mix(hex, "#ffffff", amt) : mix(hex, "#000000", amt);
+}
+
+/** Toolbar/tab-strip background: one subtle step off the terminal background. */
+export function toolbarBgFor(bg: string): string {
+  return shade(bg, 0.1);
+}
+/** Border color: a stronger step off, so the panel is clearly outlined. */
+export function borderFor(bg: string): string {
+  return shade(bg, 0.28);
+}
+
 /**
  * Panel/tab/toolbar chrome colors, derived entirely from the theme's own
  * palette — so the terminal tabs, title, borders, and the strip around the
- * terminal all match the selected theme. No per-theme config needed: every
- * theme already defines background, foreground, cursor, and ansiBrightBlack.
+ * terminal all match the selected theme. The toolbar sits one shade off the
+ * terminal background (lighter on dark themes, darker on light ones) and gets
+ * a visible border, so the chrome reads as a distinct, professional strip
+ * rather than blending into the terminal content.
  */
 function chromeColorsFor(theme: RetroTheme): Record<string, string> {
   const c = theme.colors;
   const bg = c["terminal.background"];
   const fg = c["terminal.foreground"];
   const accent = c["terminalCursor.foreground"];
-  const dim = c["terminal.ansiBrightBlack"];
+  const toolbarBg = toolbarBgFor(bg);
+  const border = borderFor(bg);
+  const mutedFg = mix(fg, bg, 0.55);
   return {
-    // The whole bottom panel region (tabs strip + toolbar background)
-    "panel.background": bg,
-    "panel.border": dim,
-    "panelSection.border": dim,
-    // Panel title / active tab label + its underline
+    // The panel container (tabs strip + toolbar), one shade off the terminal
+    "panel.background": toolbarBg,
+    "panel.border": border,
+    "panelSection.border": border,
+    "panelSectionHeader.background": toolbarBg,
+    // Panel title / active tab label + its accent underline
     "panelTitle.activeForeground": fg,
-    "panelTitle.inactiveForeground": dim,
+    "panelTitle.inactiveForeground": mutedFg,
     "panelTitle.activeBorder": accent,
-    // The terminal tab list on the right
+    "panelTitle.border": border,
+    // The terminal tab list on the right + borders around the region
     "terminal.tab.activeBorder": accent,
-    "terminal.border": dim,
-    "terminalOverviewRuler.border": dim,
+    "terminal.border": border,
+    "terminalOverviewRuler.border": border,
   };
 }
 
@@ -111,6 +194,7 @@ async function applyTheme(theme: RetroTheme, announce: boolean): Promise<boolean
   }
   await extensionContext.globalState.update(STATE_CURRENT_THEME, theme.name);
   await extensionContext.globalState.update(STATE_MANAGED_KEYS, Object.keys(colors));
+  await applyFont(theme);
   updateStatusBar();
   themesViewProvider?.refresh();
   if (announce) {
@@ -150,6 +234,7 @@ async function resetColors(): Promise<void> {
   }
   await extensionContext.globalState.update(STATE_CURRENT_THEME, undefined);
   await extensionContext.globalState.update(STATE_MANAGED_KEYS, undefined);
+  await applyFont(undefined); // restore the user's original terminal font
   updateStatusBar();
   themesViewProvider?.refresh();
   void vscode.window.showInformationMessage("Retro Terminal: terminal colors reset.");
@@ -485,14 +570,19 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("retroTerminal.selectTheme", selectTheme),
     vscode.commands.registerCommand("retroTerminal.randomTheme", randomTheme),
     vscode.commands.registerCommand("retroTerminal.resetColors", resetColors),
-    // Re-apply the current theme when immersive mode is toggled, so the panel
-    // chrome is added or cleanly removed without touching the user's own keys.
+    // Re-apply the current theme when immersive mode or the font toggle changes,
+    // so chrome/font are added or cleanly removed without touching the user's own keys.
     vscode.workspace.onDidChangeConfiguration((e) => {
-      if (e.affectsConfiguration("retroTerminal.immersiveMode")) {
+      if (
+        e.affectsConfiguration("retroTerminal.immersiveMode") ||
+        e.affectsConfiguration("retroTerminal.themeFont")
+      ) {
         const name = extensionContext.globalState.get<string>(STATE_CURRENT_THEME);
         const theme = RETRO_THEMES.find((t) => t.name === name);
         if (theme) {
           void applyTheme(theme, false);
+        } else if (!isThemeFont()) {
+          void applyFont(undefined);
         }
       }
     })

@@ -2,7 +2,7 @@
   "name": "retro-terminal-themes",
   "displayName": "Retro Terminal Themes",
   "description": "Give the VS Code integrated terminal a retro computing look — 20 themes spanning 1960 to 2010, from IBM mainframes to Solarized.",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "publisher": "ToqirAhmad",
   "license": "MIT",
   "icon": "images/icon.png",
@@ -72,6 +72,11 @@
           "type": "boolean",
           "default": true,
           "markdownDescription": "Also tint the terminal **panel chrome** — the tabs strip, title, toolbar background, and borders — to match the selected theme, not just the terminal content area.\n\nNote: the bottom panel is shared, so this also tints the Problems / Output / Debug Console tabs. Turn it off to restyle only the terminal viewport."
+        },
+        "retroTerminal.themeFont": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Also set an **era-appropriate terminal font** for each theme via `terminal.integrated.fontFamily` (e.g. VT323 for CRT themes, IBM Plex Mono for mainframe/DOS, Ubuntu Mono for Ubuntu).\n\nEach theme uses a fallback stack ending in `monospace`, so the terminal stays readable even if the ideal font isn't installed. Install the free fonts (VT323, IBM Plex Mono, Share Tech Mono, Courier Prime, Ubuntu Mono) for the full effect. Turn this off to keep your own terminal font."
         }
       }
     }
